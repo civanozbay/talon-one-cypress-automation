@@ -1,14 +1,6 @@
 import { CartPage } from "../pages/CartPage";
 import { HomePage } from "../pages/HomePage";
 import { ProductDetailPage } from "../pages/ProductDetailPage";
-import {
-  name,
-  country,
-  city,
-  creditCard,
-  month,
-  year,
-} from "../fixtures/orderInputs.json";
 
 describe("Purchase Flow", () => {
   const homePage = new HomePage();
@@ -20,7 +12,7 @@ describe("Purchase Flow", () => {
   });
 
   it("Successful Laptop Purchase", () => {
-    homePage.selectLaptopCategory().getProduct("MacBook air").productList();
+    homePage.selectLaptopCategory().productList().getProduct("MacBook air");
 
     cy.location("pathname").should("equal", "/prod.html");
 
@@ -40,7 +32,7 @@ describe("Purchase Flow", () => {
   });
 
   it("Place order with empty fields", () => {
-    homePage.selectLaptopCategory().getProduct("Sony vaio i7").productList();
+    homePage.selectLaptopCategory().productList().getProduct("MacBook Pro");
 
     cy.location("pathname").should("equal", "/prod.html");
 
@@ -61,7 +53,7 @@ describe("Purchase Flow", () => {
   });
 
   it("Add multiple orders to cart", () => {
-    homePage.selectLaptopCategory().getProduct("Sony vaio i7").productList();
+    homePage.selectLaptopCategory().productList().getProduct("MacBook Pro");
 
     cy.location("pathname").should("equal", "/prod.html");
 
@@ -69,7 +61,7 @@ describe("Purchase Flow", () => {
     cy.verifyAlertText("Product added.");
 
     homePage.homePageBtn().click();
-    homePage.selectLaptopCategory().getProduct("Dell i7 8gb").productList();
+    homePage.selectLaptopCategory().productList().getProduct("Dell i7 8gb");
     cy.location("pathname").should("equal", "/prod.html");
 
     productDetailPage.addToCartBtn().should("be.visible").click();

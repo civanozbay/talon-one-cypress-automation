@@ -52,6 +52,22 @@ export class CartPage extends BasePage {
   }
 
   /**
+   * Stabilized typing helper to prevent flaky input behavior.
+   * Verifies visibility, enabled state, and final input value.
+   */
+  private safeType(
+    element: Cypress.Chainable<JQuery<HTMLElement>>,
+    value: string
+  ) {
+    element
+      .should("be.visible")
+      .and("not.be.disabled")
+      .clear()
+      .type(value)
+      .should("have.value", value);
+  }
+
+  /**
    * Fill checkout form and submit
    * @param fields - Checkout fields
    */
@@ -63,12 +79,12 @@ export class CartPage extends BasePage {
     month: string;
     year: string;
   }): this {
-    this.nameInput().type(fields.name);
-    this.countryInput().type(fields.country);
-    this.cityInput().type(fields.city);
-    this.cardInput().type(fields.creditCard);
-    this.monthInput().type(fields.month);
-    this.yearInput().type(fields.year);
+    this.safeType(this.nameInput(), fields.name);
+    this.safeType(this.countryInput(), fields.country);
+    this.safeType(this.cityInput(), fields.city);
+    this.safeType(this.cardInput(), fields.creditCard);
+    this.safeType(this.monthInput(), fields.month);
+    this.safeType(this.yearInput(), fields.year);
 
     this.purchaseBtn().click();
 
@@ -101,6 +117,6 @@ export class CartPage extends BasePage {
         const total = parseInt(text.trim());
         expect(total).to.be.a("number").and.to.be.greaterThan(0);
       });
-    return this; // chainable
+    return this;
   }
 }

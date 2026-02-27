@@ -16,7 +16,8 @@ export class BasePage {
   }
 
   productList() {
-    return cy.get("#tbodyid").should("be.visible");
+    cy.get("#tbodyid").should("be.visible");
+    return this;
   }
 
   selectLaptopCategory() {

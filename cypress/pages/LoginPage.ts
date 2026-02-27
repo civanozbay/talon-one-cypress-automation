@@ -2,7 +2,7 @@ import { BasePage } from "./BasePage";
 
 export class LoginPage extends BasePage {
   usernameField() {
-    return cy.get("#loginusername");
+    return cy.get("#loginusername", { timeout: 10000 });
   }
 
   passwordField() {
@@ -11,5 +11,9 @@ export class LoginPage extends BasePage {
 
   loginButton() {
     return cy.contains(".btn-primary", "Log in");
+  }
+
+  loginModal() {
+    return cy.get("#logInModal");
   }
 }

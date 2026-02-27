@@ -39,8 +39,17 @@ Cypress.Commands.add("login", (username: string, password: string) => {
   cy.intercept("POST", "https://api.demoblaze.com/login").as("loginUser");
 
   loginPage.loginBtnNavbar().click();
-  loginPage.usernameField().should("be.visible").and("be.enabled");
-  loginPage.usernameField().clear().type(username, { delay: 200 });
+
+  loginPage.loginModal().should("be.visible").and("have.class", "show");
+  loginPage
+    .usernameField()
+    .should("be.visible")
+    .and("be.enabled")
+    .as("username");
+  cy.get("@username")
+    .clear()
+    .type(username, { delay: 250, force: true })
+    .should("have.value", username);
   loginPage.passwordField().type(password);
   loginPage.loginButton().click();
 
