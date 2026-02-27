@@ -23,3 +23,45 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+import { LoginPage } from "../pages/LoginPage";
+
+Cypress.Commands.add("login", (username: string, password: string) => {
+  const loginPage = new LoginPage();
+  cy.visit("/");
+  const log = Cypress.log({
+    name: "login",
+    displayName: "LOGIN",
+    // @ts-ignore
+    autoEnd: false,
+  });
+
+  cy.intercept("POST", "https://api.demoblaze.com/login").as("loginUser");
+
+  loginPage.loginButtonNavbar().click();
+  loginPage.usernameField().should("be.visible").and("be.enabled");
+  loginPage.usernameField().clear().type(username, { delay: 200 });
+  loginPage.passwordField().type(password);
+  loginPage.loginButton().click();
+
+  cy.wait("@loginUser").then((loginUser: any) => {
+    log.set({
+      consoleProps() {
+        return {
+          username,
+          password,
+        };
+      },
+    });
+  });
+});
+
+Cypress.Commands.add("getProduct", (name: string) => {
+  cy.contains(".card-title a", name);
+});
+
+Cypress.Commands.add("verifyAlertText", (alertText: string) => {
+  cy.on("window:alert", (text) => {
+    expect(text).to.equal(alertText);
+  });
+});
