@@ -1,5 +1,5 @@
 export class BasePage {
-  loginButtonNavbar() {
+  loginBtnNavbar() {
     return cy.get("#login2");
   }
 

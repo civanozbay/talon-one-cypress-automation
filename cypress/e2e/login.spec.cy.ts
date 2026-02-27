@@ -23,12 +23,16 @@ describe("Login Cases", () => {
 
   it("Login with empty username and password", () => {
     cy.visit("/");
-    loginPage.loginButtonNavbar().click();
-    loginPage.usernameField().should("be.visible");
+    loginPage.loginBtnNavbar().click();
+    loginPage.usernameField().should("be.visible").and("be.enabled");
     loginPage.loginButton().click();
 
     cy.verifyAlertText("Please fill out Username and Password.");
   });
 
-  it("Logout successfully", () => {});
+  it("Logout successfully", () => {
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    loginPage.logoutBtnNavbar().should("be.visible").click();
+    loginPage.loginBtnNavbar().should("be.visible");
+  });
 });
