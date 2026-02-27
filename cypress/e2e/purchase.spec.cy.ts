@@ -30,6 +30,8 @@ describe("Purchase Flow", () => {
     homePage.openCart();
     cy.location("pathname").should("equal", "/cart.html");
 
+    cartPage.verifyTotalAmount();
+
     cartPage.openPlaceOrder();
     cy.fixture("orderInputs").then((inputs) => {
       cartPage.fillAndPlaceOrder(inputs);
@@ -46,11 +48,12 @@ describe("Purchase Flow", () => {
 
     homePage.openCart();
     cy.location("pathname").should("equal", "/cart.html");
+    cartPage.verifyTotalAmount();
 
     cartPage
       .productsTable()
       .openPlaceOrder()
-      .totalAmount()
+      .totalAmountInForm()
       .purchaseBtn()
       .click();
 
@@ -74,6 +77,7 @@ describe("Purchase Flow", () => {
 
     homePage.openCart();
     cy.location("pathname").should("equal", "/cart.html");
+    cartPage.verifyTotalAmount();
 
     cartPage.openPlaceOrder();
     cy.fixture("orderInputs").then((inputs) => {

@@ -42,7 +42,11 @@ export class CartPage extends BasePage {
     return this;
   }
 
-  totalAmount() {
+  totalAmountInCart() {
+    return cy.get("#totalp");
+  }
+
+  totalAmountInForm() {
     cy.get("#totalm").should("be.visible");
     return this;
   }
@@ -63,7 +67,6 @@ export class CartPage extends BasePage {
     this.countryInput().type(fields.country);
     this.cityInput().type(fields.city);
     this.cardInput().type(fields.creditCard);
-    this.cardInput().type(fields.creditCard);
     this.monthInput().type(fields.month);
     this.yearInput().type(fields.year);
 
@@ -81,12 +84,23 @@ export class CartPage extends BasePage {
     this.successPopup()
       .should("be.visible")
       .within(() => {
-        cy.contains("Id:").should("be.visible");
-        cy.contains("Amount:").should("be.visible");
-        cy.contains("Card Number:").should("be.visible");
-        cy.contains("Name:").should("be.visible");
-        cy.contains("Date:").should("be.visible");
+        ["Id:", "Amount:", "Card Number:", "Name:", "Date:"].forEach(
+          (label) => {
+            cy.contains(label).should("be.visible");
+          }
+        );
       });
     return this;
+  }
+
+  verifyTotalAmount() {
+    this.totalAmountInCart()
+      .should("be.visible")
+      .invoke("text")
+      .then((text) => {
+        const total = parseInt(text.trim());
+        expect(total).to.be.a("number").and.to.be.greaterThan(0);
+      });
+    return this; // chainable
   }
 }
