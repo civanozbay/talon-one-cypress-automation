@@ -12,6 +12,15 @@ export class BasePage {
   }
 
   laptopCategory() {
-    return cy.contains("#itemc", "Laptops");
+    cy.contains("#itemc", "Laptops").should("be.visible").click();
+    return this;
+  }
+
+  cartButtonNavBar() {
+    return cy.get("#cartur");
+  }
+
+  getProduct(name: string): void {
+    cy.contains(".card-title a", name).should("be.visible").click();
   }
 }

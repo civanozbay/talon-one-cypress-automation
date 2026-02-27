@@ -56,10 +56,6 @@ Cypress.Commands.add("login", (username: string, password: string) => {
   });
 });
 
-Cypress.Commands.add("getProduct", (name: string) => {
-  cy.contains(".card-title a", name);
-});
-
 Cypress.Commands.add("verifyAlertText", (alertText: string) => {
   cy.on("window:alert", (text) => {
     expect(text).to.equal(alertText);
