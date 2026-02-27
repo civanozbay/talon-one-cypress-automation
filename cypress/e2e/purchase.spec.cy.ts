@@ -20,7 +20,7 @@ describe("Purchase Flow", () => {
   });
 
   it("Successful Laptop Purchase", () => {
-    homePage.selectLaptopCategory().getProduct("MacBook air");
+    homePage.selectLaptopCategory().getProduct("MacBook air").productList();
 
     cy.location("pathname").should("equal", "/prod.html");
 
@@ -37,10 +37,48 @@ describe("Purchase Flow", () => {
     cartPage.verifySuccessFields();
   });
 
-  it("test", () => {
-    //   Negative / Edge Cases:
-    // •	Place order with empty fields → validation
-    // •	Add multiple products to cart → quantity check
-    // •	Invalid credit card → alert
+  it("Place order with empty fields", () => {
+    homePage.selectLaptopCategory().getProduct("Sony vaio i7").productList();
+
+    cy.location("pathname").should("equal", "/prod.html");
+
+    productDetailPage.addToCartBtn().should("be.visible").click();
+
+    homePage.openCart();
+    cy.location("pathname").should("equal", "/cart.html");
+
+    cartPage
+      .productsTable()
+      .openPlaceOrder()
+      .totalAmount()
+      .purchaseBtn()
+      .click();
+
+    cy.verifyAlertText("Please fill out Name and Creditcard.");
+  });
+
+  it("Add multiple orders to cart", () => {
+    homePage.selectLaptopCategory().getProduct("Sony vaio i7").productList();
+
+    cy.location("pathname").should("equal", "/prod.html");
+
+    productDetailPage.addToCartBtn().should("be.visible").click();
+    cy.verifyAlertText("Product added.");
+
+    homePage.homePageBtn().click();
+    homePage.selectLaptopCategory().getProduct("Dell i7 8gb").productList();
+    cy.location("pathname").should("equal", "/prod.html");
+
+    productDetailPage.addToCartBtn().should("be.visible").click();
+    cy.verifyAlertText("Product added.");
+
+    homePage.openCart();
+    cy.location("pathname").should("equal", "/cart.html");
+
+    cartPage.openPlaceOrder();
+    cy.fixture("orderInputs").then((inputs) => {
+      cartPage.fillAndPlaceOrder(inputs);
+    });
+    cartPage.verifySuccessFields();
   });
 });

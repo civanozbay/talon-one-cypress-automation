@@ -11,6 +11,14 @@ export class BasePage {
     return cy.get("#logout2");
   }
 
+  homePageBtn() {
+    return cy.get("#nava");
+  }
+
+  productList() {
+    return cy.get("#tbodyid").should("be.visible");
+  }
+
   selectLaptopCategory() {
     cy.contains("#itemc", "Laptops").should("be.visible").click();
     return this;
@@ -20,7 +28,8 @@ export class BasePage {
     return cy.get("#cartur");
   }
 
-  getProduct(name: string): void {
+  getProduct(name: string): this {
     cy.contains(".card-title a", name).should("be.visible").click();
+    return this;
   }
 }

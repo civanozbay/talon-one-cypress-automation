@@ -37,6 +37,16 @@ export class CartPage extends BasePage {
     return cy.get("p.lead.text-muted");
   }
 
+  productsTable() {
+    cy.get("#tbodyid").should("be.visible");
+    return this;
+  }
+
+  totalAmount() {
+    cy.get("#totalm").should("be.visible");
+    return this;
+  }
+
   /**
    * Fill checkout form and submit
    * @param fields - Checkout fields
