@@ -29,4 +29,6 @@ describe("Login Cases", () => {
 
     cy.verifyAlertText("Please fill out Username and Password.");
   });
+
+  it("Logout successfully", () => {});
 });

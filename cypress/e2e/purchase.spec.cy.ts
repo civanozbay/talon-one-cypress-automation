@@ -1,6 +1,14 @@
 import { CartPage } from "../pages/CartPage";
 import { HomePage } from "../pages/HomePage";
 import { ProductDetailPage } from "../pages/ProductDetailPage";
+import {
+  name,
+  country,
+  city,
+  creditCard,
+  month,
+  year,
+} from "../fixtures/orderInputs.json";
 
 describe("Purchase Flow", () => {
   const homePage = new HomePage();
@@ -12,7 +20,7 @@ describe("Purchase Flow", () => {
   });
 
   it("Successful Laptop Purchase", () => {
-    homePage.laptopCategory().getProduct("MacBook air");
+    homePage.selectLaptopCategory().getProduct("MacBook air");
 
     cy.location("pathname").should("equal", "/prod.html");
 
@@ -22,16 +30,17 @@ describe("Purchase Flow", () => {
     homePage.openCart();
     cy.location("pathname").should("equal", "/cart.html");
 
-    cartPage
-      .openPlaceOrder()
-      .fillAndPlaceOrder({
-        name: "Civan",
-        country: "Germany",
-        city: "Berlin",
-        creditCard: "1234 5678 9012 3456",
-        month: "02",
-        year: "2026",
-      })
-      .verifySuccessFields();
+    cartPage.openPlaceOrder();
+    cy.fixture("orderInputs").then((inputs) => {
+      cartPage.fillAndPlaceOrder(inputs);
+    });
+    cartPage.verifySuccessFields();
+  });
+
+  it("test", () => {
+    //   Negative / Edge Cases:
+    // •	Place order with empty fields → validation
+    // •	Add multiple products to cart → quantity check
+    // •	Invalid credit card → alert
   });
 });

@@ -11,7 +11,7 @@ export class BasePage {
     return cy.get("#logout2");
   }
 
-  laptopCategory() {
+  selectLaptopCategory() {
     cy.contains("#itemc", "Laptops").should("be.visible").click();
     return this;
   }
